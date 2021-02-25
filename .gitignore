@@ -1,0 +1,6 @@
+*.txt
+*.net
+
+__pycache__
+.pytest_cache
+venv

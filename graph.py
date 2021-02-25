@@ -165,9 +165,6 @@ class Graph:
 
         for i in range(self.qtdVertices() - 1):
             for (u, v) in self.weight_function.keys():
-                print('\n\n')
-                print(f'u: {u.number}, v: {v.number}')
-                print(f'{Dv[v.number-1]} > {Dv[u.number-1]} + {self.weight_function[(u, v)]}')
                 if Dv[v.number-1] > (Dv[u.number-1] + self.weight_function[(u,v)]):
                     Dv[v.number-1] = Dv[u.number-1] + self.weight_function[(u,v)]
                     Av[v.number-1] = u

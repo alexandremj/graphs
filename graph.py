@@ -129,7 +129,6 @@ class Graph:
         # IMPLEMENTAR linhas 12 a 17
 
 
-
     # algoritmo para busca de ciclos eulerianos em um grafo
     def hierholzer(self):
         # utilizaremos um dicionário ordenado para que possamos indexar
@@ -153,7 +152,7 @@ class Graph:
                 return (True, cycle)
 
     
-    # algoritmo de Bellman-Ford para encontrar caminhos mínimos do vértice de
+    # algoritmo de Bellman-Ford para encontrar caminhos minimos do vertice de
     # origem a cada outro vértice no grafo
     def bellman_ford(self, origin_index: int):
         origin = self.vertices[origin_index-1]
@@ -176,7 +175,68 @@ class Graph:
         return (True, Dv, Av)
     
     
+    # metodo auxiliar que transforma o grafo da representacao como lista de
+    # adjacencias em uma matriz de adjacencias
+    def to_matrix(self):
+        l = []
 
+        # aliasing
+        n_vertices = self.qtdVertices()
+
+        for i in range(n_vertices):
+            l.append([])
+
+            for j in range(n_vertices):
+                if i == j:
+                    l[i].append(0)
+                else:
+                    u, v = self.vertices[i], self.vertices[j]
+
+                    if (u, v) in self.weight_function.keys():
+                        l[i].append(self.weight_function[(u, v)])
+                    else:
+                        l[i].append(maxsize)
+        
+        return l
+    
+
+    # metodo auxiliar que cria uma matriz preenchida por infinito de dimensoes
+    # |V| x |V| para uso no algoritmo de Floyd-Warshall
+    def to_empty_matrix(self):
+        l = []
+
+        # aliasing
+        n_vertices = self.qtdVertices()
+
+        for i in range(n_vertices):
+            l.append([])
+
+            for j in range(n_vertices):
+                # em duvida se necessario, ja que iremos reescrever em breve
+                if i == j:
+                    l[i].append(0)
+                else:
+                    l[i].append(maxsize)
+        return l
+
+
+    # algoritmo de Floyd-Warshall para encontrar as distancias entre todos os
+    # vertices do grafo
+    def floyd_warshall(self):
+        # cria a matriz de adjacencias d_0
+        d_k_minus_one = self.to_matrix()
+
+        for k in range(self.qtdVertices()):
+            d_k = self.to_empty_matrix()
+
+            for u in range(self.qtdVertices()):
+                for v in range(self.qtdVertices()):
+                    d_k[u][v] = min(d_k_minus_one[u][v],
+                                d_k_minus_one[u][k] + d_k_minus_one[k][v])
+            
+            d_k_minus_one = d_k
+        
+        return d_k_minus_one
 
 
 def ler(arquivo):
